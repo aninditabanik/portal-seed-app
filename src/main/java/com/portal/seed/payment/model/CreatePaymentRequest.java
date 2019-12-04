@@ -1,0 +1,41 @@
+package com.portal.seed.payment.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigInteger;
+import java.util.UUID;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class CreatePaymentRequest {
+    private BigInteger amount;
+    private String currencyCode;
+    private UUID merchantId;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private UUID paymentSourceTokenId;
+    private String gatewayPaymentSourceToken;
+    private UUID gatewayId;
+    private UUID paymentSourceConfigId;
+
+//    public CreatePaymentRequest(Integer amount, String currencyCode, UUID merchantId, String email,
+//                                String firstName, String lastName, UUID paymentSourceTokenId, String gatewayPaymentSourceToken,
+//                                UUID gatewayId, UUID paymentSourceConfigId) {
+//        this.amount = amount;
+//        this.currencyCode = currencyCode;
+//        this.merchantId = merchantId;
+//        this.email = email;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.paymentSourceTokenId = paymentSourceTokenId;
+//        this.gatewayPaymentSourceToken = gatewayPaymentSourceToken;
+//        this.gatewayId = gatewayId;
+//        this.paymentSourceConfigId = paymentSourceConfigId;
+//    }
+}
