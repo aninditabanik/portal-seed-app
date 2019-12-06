@@ -1,4 +1,4 @@
-package com.portal.seed.payment.model;
+package com.portal.seed.controller.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +23,8 @@ public class CreatePaymentRequest {
     private String gatewayPaymentSourceToken;
     private UUID gatewayId;
     private UUID paymentSourceConfigId;
+    private String transactionType;
+    private String status;
 
 //    public CreatePaymentRequest(Integer amount, String currencyCode, UUID merchantId, String email,
 //                                String firstName, String lastName, UUID paymentSourceTokenId, String gatewayPaymentSourceToken,

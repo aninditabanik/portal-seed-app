@@ -1,7 +1,10 @@
 package com.portal.seed.controller;
 
+import com.portal.seed.controller.request.PaymentRequestBuilder;
+import com.portal.seed.elevate.model.MerchantAssociationEntity;
+import com.portal.seed.elevate.model.api.MerchantAssociation;
 import com.portal.seed.elevate.repo.ElevateRepository;
-import com.portal.seed.payment.model.CreatePaymentRequest;
+import com.portal.seed.controller.request.CreatePaymentRequest;
 import com.portal.seed.payment.model.api.Merchant;
 import com.portal.seed.payment.model.api.PaymentIntent;
 import com.portal.seed.payment.repo.PaymentIntentEntityRepository;
@@ -15,8 +18,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,6 +31,11 @@ public class SeedController {
     @Value("${payment.restURL}")
     String paymentURL;
 
+    @Value("${elevate.restURL}")
+    String elevateURL;
+
+    public static final String ORG_ID = "1008";
+    public static final String MERCHANT_ID = "5cc59b1e-4872-4700-96b0-12ace486bd14";
 
     private UUID merchantId;
     private final OrganizationRepository portalRepo;
@@ -35,6 +43,7 @@ public class SeedController {
     private final UserRoleOrgRepository uroRepo;
     private  final PaymentTransactionRepository paymentTxnRepo;
     private  final PaymentIntentEntityRepository paymentIntentRepo;
+    PaymentRequestBuilder requestBuilder = new PaymentRequestBuilder();
 
     @Autowired
     SeedController(OrganizationRepository portalRepo, ElevateRepository elevateRepo, UserRoleOrgRepository
@@ -57,7 +66,7 @@ public class SeedController {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<String>(headers);
 
-        String result =  restTemplate.exchange(paymentURL+id, HttpMethod.GET, entity, String.class).getBody();
+        String result =  restTemplate.exchange(paymentURL+"merchants/"+id, HttpMethod.GET, entity, String.class).getBody();
         return result;
     }
 
@@ -108,14 +117,15 @@ public class SeedController {
         return merchant;
     }
 
+
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(
-            value = "/payments",
+            value = "/payment",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String createPayment() {
-        CreatePaymentRequest in = makeRequest();
+    public String createSinglePayment() {
+        CreatePaymentRequest in = requestBuilder.makeRequest();
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<CreatePaymentRequest> entity = new HttpEntity<CreatePaymentRequest>(in, headers);
@@ -125,26 +135,62 @@ public class SeedController {
         return "payment";
     }
 
-    private CreatePaymentRequest makeRequest() {
-        CreatePaymentRequest in = new CreatePaymentRequest();
-        in.setAmount(BigInteger.TEN);
-        in.setCurrencyCode("USD");
-        in.setFirstName("SeedUserFirstName");
-        in.setLastName("SeedUserLastName");
-        in.setEmail("seed.user@portal.com");
-        in.setGatewayId(UUID.fromString("f23da98a-c7aa-4637-962a-8c852e765e38"));
-        in.setGatewayPaymentSourceToken("tok_visa");
-        in.setMerchantId(UUID.fromString("47b70ca4-0f6e-4c52-819f-667ae804f9d2"));
-        //in.setMerchantId(merchantId);
-        in.setPaymentSourceConfigId(UUID.fromString("b1016af0-8b34-43b9-9e4d-940b4f53aeb3"));
-        in.setPaymentSourceTokenId(UUID.fromString("98e11d34-4519-4668-b09d-85a3c6765989"));
-        return in;
+
+
+    @DeleteMapping("/merchant")
+    public String  deleteMerchant() {
+        MerchantAssociationEntity merchantAssociation = elevateRepo.findByOrgId(ORG_ID);
+        if(merchantAssociation!=null){
+            elevateRepo.deleteById(merchantAssociation.getMerchantId());
+            paymentTxnRepo.deleteByMerchant(UUID.fromString(merchantAssociation.getMerchantId()));
+            paymentIntentRepo.deleteByMerchant(UUID.fromString(merchantAssociation.getMerchantId()));
+        }
+        return "deleted all";
     }
 
-    @DeleteMapping("/payments")
-    public String  deletePayments() {
-        paymentTxnRepo.deleteAll();
-        paymentIntentRepo.deleteAll();
-        return "deleted all";
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(
+            value = "/merchantmap",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public MerchantAssociationEntity createMerchantAssociation() {
+        MerchantAssociationEntity merchantAssociation = new MerchantAssociationEntity();
+        merchantAssociation.setMerchantId(MERCHANT_ID);
+        merchantAssociation.setOrgId(ORG_ID);
+        merchantAssociation = elevateRepo.save(merchantAssociation);
+        return merchantAssociation;
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(
+            value = "/payments",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public String createPayments() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<CreatePaymentRequest> entity;
+        PaymentIntent payment;
+        List<CreatePaymentRequest> paymentList = requestBuilder.getPayments();
+        for(CreatePaymentRequest in: paymentList){
+            entity = new HttpEntity<CreatePaymentRequest>(in, headers);
+            payment = restTemplate.exchange(paymentURL+"intents/", HttpMethod.POST, entity, PaymentIntent.class).getBody();
+        }
+        return "payment";
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(
+            value = "/seed",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public String seedData() {
+        deleteMerchant();
+        createMerchantAssociation();
+        createPayments();
+        return "Seeding complete!";
     }
 }

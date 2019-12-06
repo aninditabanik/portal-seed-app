@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "merchant_association", schema = "elevate")
-public class MerchantAssociation {
+public class MerchantAssociationEntity {
 
     @Column(name = "organization_id")
     private String orgId;

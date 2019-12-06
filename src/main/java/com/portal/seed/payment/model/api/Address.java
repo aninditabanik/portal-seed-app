@@ -1,6 +1,5 @@
 package com.portal.seed.payment.model.api;
 
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,13 +13,12 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Merchant extends Auditable {
-    private Address billingAddress;
-    private String defaultMerchantGatewayConfigurationName;
-
-    private String name;
-
-    public Merchant(UUID id) {
-        this.id = id;
-    }
+public class Address extends Auditable {
+    private Country country;
+    private String line1;
+    private String line2;
+    private String city;
+    private String state;
+    private String briefpostalcode;
+    private String fullpostalcode;
 }

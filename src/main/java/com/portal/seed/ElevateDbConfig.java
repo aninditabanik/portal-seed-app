@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 public class ElevateDbConfig {
 
     @Bean(name = "elevateDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.third")
+    @ConfigurationProperties(prefix = "elevate.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }

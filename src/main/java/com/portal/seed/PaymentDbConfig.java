@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class PaymentDbConfig {
 
     @Bean(name = "paymentDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.second")
+    @ConfigurationProperties(prefix = "payment.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }

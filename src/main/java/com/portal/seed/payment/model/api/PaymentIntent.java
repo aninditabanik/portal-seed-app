@@ -1,5 +1,6 @@
 package com.portal.seed.payment.model.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PaymentIntent {
 
-    private Merchant merchant;
-//    private ExpandableField<PaymentSchedule> paymentSchedule;
-//    private ExpandableField<PaymentSourceToken> paymentSourceToken;
-//    private PaymentTxn resultingTxn;
+    private ExpandableField<Merchant> merchant;
     private String transactionType;
     private String currencyCode;
     private BigInteger amount;
@@ -40,5 +38,9 @@ public class PaymentIntent {
     @EqualsAndHashCode.Exclude
     private JsonNode metadata;
 
+    @JsonIgnore
+    public Merchant getMerchantObject() {
+        return null == merchant ? null : merchant.getUnderlyingObject();
+    }
 }
 
