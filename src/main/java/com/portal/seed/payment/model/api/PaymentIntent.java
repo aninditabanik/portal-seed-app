@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentIntent {
+public class PaymentIntent extends Auditable {
 
     private ExpandableField<Merchant> merchant;
     private String transactionType;
@@ -35,6 +35,7 @@ public class PaymentIntent {
     private String email;
     private String firstName;
     private String lastName;
+    private PaymentTxn resultingTxn;
     @EqualsAndHashCode.Exclude
     private JsonNode metadata;
 

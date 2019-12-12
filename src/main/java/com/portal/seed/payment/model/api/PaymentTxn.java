@@ -1,24 +1,22 @@
 package com.portal.seed.payment.model.api;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 
+@ToString(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentTxn {
-
-
-    private Merchant merchant;
-    private PaymentIntent paymentIntent;
-//    private ExpandableField<PaymentSourceToken> paymentSourceToken;
+public class PaymentTxn extends Auditable {
+    private ExpandableField<Merchant> merchant;
+    private ExpandableField<PaymentIntent> paymentIntent;
+    //private ExpandableField<PaymentSourceToken> paymentSourceToken;
     private PaymentTxn originalTxn;
     private String transactionType;
     private String currencyCode;
@@ -36,15 +34,15 @@ public class PaymentTxn {
     private String adjustmentComments;
     private String customerVisibleTransactionNumber;
 
-//    @JsonIgnore
-//    public Merchant getMerchantObject() {
-//        return null == merchant ? null : merchant.getUnderlyingObject();
-//    }
-//
-//    @JsonIgnore
-//    public PaymentIntent getPaymentIntentObject() {
-//        return null == paymentIntent ? null : paymentIntent.getUnderlyingObject();
-//    }
+    @JsonIgnore
+    public Merchant getMerchantObject() {
+        return null == merchant ? null : merchant.getUnderlyingObject();
+    }
+
+    @JsonIgnore
+    public PaymentIntent getPaymentIntentObject() {
+        return null == paymentIntent ? null : paymentIntent.getUnderlyingObject();
+    }
 //
 //    @JsonIgnore
 //    public PaymentSourceToken getPaymentSourceTokenObject() {

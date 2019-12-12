@@ -2,6 +2,7 @@ package com.portal.seed.payment.model;
 
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -38,11 +39,11 @@ public abstract class AuditableEntity extends VersionedEntity {
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
-    protected Instant createdAt;
+    protected LocalDate createdAt;
 
     @Column(name = "modified_at")
     @UpdateTimestamp
-    protected Instant modifiedAt;
+    protected LocalDate modifiedAt;
 
     @Column(name = "remote_created_by", length = 1000)
     protected String remoteCreatedBy;
