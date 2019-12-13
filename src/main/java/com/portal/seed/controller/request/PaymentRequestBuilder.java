@@ -21,6 +21,7 @@ public class PaymentRequestBuilder {
     public List<CreatePaymentRequest> getPayments(){
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 10000, "Payment", "captured", LocalDate.of(2018, 10, 31), true));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 94000, "Payment", "captured", LocalDate.of(2018, 12, 30), false));
+        payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 94000, "Payment", "authorized", LocalDate.of(2018, 12, 30), false));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 27000, "Payment", "captured", LocalDate.of(2019, 01, 10), false));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com",  1000, "Payment", "captured", LocalDate.of(2019, 02, 02), false));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 40300, "Payment", "declined", LocalDate.of(2019, 03, 15), false));
@@ -32,6 +33,10 @@ public class PaymentRequestBuilder {
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 6700, "Payment", "captured", LocalDate.of(2019, 9, 30), true));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 50500, "Payment", "pending", LocalDate.of(2019, 10, 20), false));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 40400, "Payment", "declined", LocalDate.of(2019, 10, 30), false));
+        payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 99900, "Payment", "canceled", LocalDate.of(2019, 10, 30), false));
+        payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 88800, "Payment", "error", LocalDate.of(2019, 10, 30), false));
+        payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com",  600, "Payment", "new", LocalDate.of(2019, 07, 02), false));
+        payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com",  600, "Payment", "refunded", LocalDate.of(2019, 07, 02), false));
 
         payments.add(createRequest(SeedController.MERCHANT_ID,"Kevin", "Casanova", "KevinC@email.com", 1, "Payment", "captured", LocalDate.of(2018, 10, 31), true));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Kevin", "Casanova", "KevinC@email.com", 11, "Payment", "captured", LocalDate.of(2018, 12, 30), false));
