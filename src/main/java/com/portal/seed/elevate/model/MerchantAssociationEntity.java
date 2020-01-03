@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "merchant_association", schema = "elevate")
+@Table(name = "merchant_association", schema = "portal_elevate")
 public class MerchantAssociationEntity {
 
     @Column(name = "organization_id")

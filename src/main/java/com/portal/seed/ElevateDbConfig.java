@@ -40,7 +40,7 @@ public class ElevateDbConfig {
                 builder
                         .dataSource(dataSource)
                         .packages("com.portal.seed.elevate.model")
-                        .persistenceUnit("elevate")
+                        .persistenceUnit("portal_elevate")
                         .build();
     }
     @Bean(name = "elevateTransactionManager")

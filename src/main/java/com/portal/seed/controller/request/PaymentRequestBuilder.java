@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class PaymentRequestBuilder {
 
-    List<CreatePaymentRequest> payments = new ArrayList<>();
+    List<CreatePaymentRequest> payments;
 
     static final String GATEWAY_ID = "f23da98a-c7aa-4637-962a-8c852e765e38";
     static final String PAYMENT_SOURCE_CONFIG_ID = "b1016af0-8b34-43b9-9e4d-940b4f53aeb3";
@@ -19,6 +19,7 @@ public class PaymentRequestBuilder {
 
 
     public List<CreatePaymentRequest> getPayments(){
+        payments = new ArrayList<>();
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 10000, "Payment", "captured", LocalDate.of(2018, 10, 31), true));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 94000, "Payment", "captured", LocalDate.of(2018, 12, 30), false));
         payments.add(createRequest(SeedController.MERCHANT_ID,"Barbara", "Rich", "BRich@email.com", 94000, "Payment", "authorized", LocalDate.of(2018, 12, 30), false));
